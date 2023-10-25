@@ -13,31 +13,44 @@ def validate_input(x):
     if x == "" or x == "\n":
         print("no input, Enter task only:", end=" ")
         x = input() + "\n"
-        return validate_input(x)
+        validate_input(x)
     else:
         return x
 
 
-def validate_index(y):
-    if 1 <= y <= len(todo_list):
-        return y
+def input_task_num():
+    try:
+        index_v = int(input("enter task number: "))
+        if index_v == 0 or index_v > len(todo_list):
+            print(f"enter values between 1 and {len(todo_list)}", end=" ")
+            return input_task_num()
+    except ValueError:
+        return input_task_num()
     else:
-        print("enter valid task number: ", end=" ")
-        y = int(input())
-        return validate_index(y)
+        return index_v
+
+
+# def validate_index(y):
+#     try:
+#         if 1 <= y <= len(todo_list):
+#             return y
+#         else:
+#             print("enter valid task number: ", end=" ")
+#             y = int(input())
+#             return validate_index(y)
+#     except ValueError:
+#         return validate_index(y)
 
 
 def read_todo_file():
-    file = open('todo.txt', 'r')
-    data = file.readlines()
-    file.close()
+    with open('todo.txt', 'r') as file:
+        data = file.readlines()
     return data
 
 
 def write_todo_file(data):
-    file = open('todo.txt', 'w')
-    file.writelines(data)
-    file.close()
+    with open('todo.txt', 'w') as file:
+        file.writelines(data)
 
 
 while True:
@@ -54,8 +67,8 @@ while True:
         case 'edit':
             show()
             if len(todo_list) > 0:
-                num = int(input("enter task number to edit: "))
-                num = validate_index(num)
+                num = input_task_num()
+                # num = validate_index(num)
                 edited_task = input("Enter task: ")
                 edited_task = validate_input(edited_task)
                 todo_list[num - 1] = edited_task+"\n"
@@ -63,8 +76,8 @@ while True:
         case 'remove':
             show()
             if len(todo_list) > 0:
-                num = int(input("enter task number to remove: "))
-                num = validate_index(num)
+                num = input_task_num()
+                # num = validate_index(num)
                 todo_list.pop(num - 1)
                 write_todo_file(todo_list)
         case 'exit':
