@@ -1,5 +1,4 @@
 user_prompt = "Enter a todo: add <task>, show, edit, remove or exit -> "
-todo_list = []
 
 
 def show():
@@ -7,13 +6,13 @@ def show():
         print("Empty to do list!!!")
     else:
         for index, item in enumerate(todo_list):
-            print(f'{index + 1}. {item}')
+            print(f'{index + 1}. {item}'.strip("\n"))
 
 
 def validate_input(x):
-    if x == "":
+    if x == "" or x == "\n":
         print("no input, Enter task only:", end=" ")
-        x = input()
+        x = input() + "\n"
         return validate_input(x)
     else:
         return x
@@ -28,42 +27,46 @@ def validate_index(y):
         return validate_index(y)
 
 
+def read_todo_file():
+    file = open('todo.txt', 'r')
+    data = file.readlines()
+    file.close()
+    return data
+
+
+def write_todo_file(data):
+    file = open('todo.txt', 'w')
+    file.writelines(data)
+    file.close()
+
+
 while True:
+    todo_list = read_todo_file()
     todo = input(user_prompt).strip()
-    cmd, task = todo.split(" ")[0], " ".join(todo.split(" ")[1:])
-    # if cmd == "add":
-    #     todo_list.append(task)
-    # elif cmd == "show":
-    #     for i in range(len(todo_list)):
-    #         print(i+1, " ", todo_list[i])
-    # elif cmd == "remove":
-    #     num = int(input("enter task number: "))
-    #     if num > len(todo_list):
-    #         print("enter valid number")
-    #         continue
-    #     else:
-    #         todo_list.pop(num-1)
-    # else:
-    #     print("enter a valid Input: eg: add <task> or show or remove ")
+    cmd, task = todo.split(" ")[0], " ".join(todo.split(" ")[1:]) + "\n"
     match cmd:
         case 'add':
             task = validate_input(task)
             todo_list.append(task)
+            write_todo_file(todo_list)
         case 'show':
             show()
         case 'edit':
             show()
-            if len(todo_list)>0:
+            if len(todo_list) > 0:
                 num = int(input("enter task number to edit: "))
                 num = validate_index(num)
                 edited_task = input("Enter task: ")
                 edited_task = validate_input(edited_task)
-                todo_list[num - 1] = edited_task
+                todo_list[num - 1] = edited_task+"\n"
+                write_todo_file(todo_list)
         case 'remove':
             show()
-            num = int(input("enter task number to remove: "))
-            num = validate_index(num)
-            todo_list.pop(num - 1)
+            if len(todo_list) > 0:
+                num = int(input("enter task number to remove: "))
+                num = validate_index(num)
+                todo_list.pop(num - 1)
+                write_todo_file(todo_list)
         case 'exit':
             print("Closing the Application.")
             break
