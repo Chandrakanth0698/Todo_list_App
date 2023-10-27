@@ -1,8 +1,10 @@
 from Module import functions
-
+import time
 user_prompt = "Enter a todo: add <task>, show, edit, remove or exit -> "
 
 while True:
+    now = time.strftime("%b %d, %y %H:%M:%S")
+    print("Time: ", now)
     todo_list = functions.read_todo_file()
     todo = input(user_prompt).strip()
     cmd, task = todo.split(" ")[0], " ".join(todo.split(" ")[1:]) + "\n"
