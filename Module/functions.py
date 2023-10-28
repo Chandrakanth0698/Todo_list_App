@@ -10,7 +10,7 @@ def validate_input(x):
     if x == "" or x == "\n":
         print("no input, Enter task only:", end=" ")
         x = input() + "\n"
-        validate_input(x)
+        return validate_input(x)
     else:
         return x
 
