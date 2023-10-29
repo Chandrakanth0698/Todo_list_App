@@ -1,5 +1,11 @@
 from Module import functions
 import time
+import os
+
+if not os.path.exists('todo.txt'):
+    with open('todo.txt', 'w') as file:
+        pass
+
 user_prompt = "Enter a todo: add <task>, show, edit, remove or exit -> "
 
 while True:
