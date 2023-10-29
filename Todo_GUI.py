@@ -20,18 +20,21 @@ while True:
     event, values = window.read()
     match event:
         case 'Add':
-            task = functions.validate_input(values['todo'])+"\n"
-            todo_list.append(task)
-            functions.write_todo_file(todo_list)
-            window['todo_list'].update(values=todo_list)
-            window['todo'].update(value=[])
+            if values['todo'] == "":
+                pass
+            else:
+                task = values['todo']+"\n"
+                todo_list.append(task)
+                functions.write_todo_file(todo_list)
+                window['todo_list'].update(values=todo_list)
+                window['todo'].update(value=[])
         case 'Edit':
             if values['todo'] == "":
                 pass
             else:
-                edited_task = values['todo']
+                edited_task = values['todo'] + "\n"
                 num = todo_list.index(values['todo_list'][0])
-                todo_list[num] = edited_task + "\n"
+                todo_list[num] = edited_task
                 functions.write_todo_file(todo_list)
                 window['todo_list'].update(values=todo_list)
                 window['todo'].update(value=[])
@@ -46,7 +49,7 @@ while True:
                 window['todo_list'].update(values=todo_list)
                 window['todo'].update(value=[])
         case 'todo_list':
-            window['todo'].update(value=values['todo_list'][0])
+            window['todo'].update(value=values['todo_list'][0][:-1])
         case 'Exit':
             break
         case sg.WIN_CLOSED:
