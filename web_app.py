@@ -19,7 +19,7 @@ for index, todo in enumerate(todo_list):
         todo_list.pop(index)
         functions.write_todo_file(todo_list)
         del st.session_state[todo]
-        st.experimental_rerun()
+        st.rerun()
 
 st.text_input(label=" ", placeholder="Add new todo...", on_change=add_todo, key='new_todo')
 
